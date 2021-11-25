@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Обновление данных пользователя</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+<h1>Введите данные</h1>
+<form name="userForm">
+    <label>id пользователя</label><br>
+    <input type="text" name="id" /><br><br>
+    <label>Изменить имя</label><br>
+    <input type="text" name="userName" /><br><br>
+    <label>Изменить возраст</label><br>
+    <input type="number" name="userAge" /><br><br>
+    <button onclick="updateUser()">Изменить данные пользователя</button><br><br>
+</form>
+<button onclick="goMain()">На главную страницу</button>
+<script>
+    async function updateUser() {
+        const form = document.forms["userForm"];
+        const userID = form.elements["id"].value;
+        const userName = form.elements["userName"].value;
+        const userAge = form.elements["userAge"].value;
+        const response = await fetch("/api/updateUser", {
+            method: "PUT",
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            body: JSON.stringify({
+                id: userID,
+                name: userName,
+                age: parseInt(userAge, 10)
+            })
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            let data = JSON.stringify(user)
+            alert(`Данные успешно перезаписаны:\n${data}`);
+        } else {
+            let text = await response.text();
+            alert(`Ошибка запроса ${response.status}: ${text}`);
+        }
+    }
+    document.forms["userForm"].addEventListener("onclick", e => {
+        e.preventDefault();
+        updateUser();
+    })
+    function goMain() {
+        location.assign("/");
+    }
+</script>
+</body>
+</html>

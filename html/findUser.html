@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Найти пользователя</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1>Поиск</h1>
+<form name="userForm">
+    <label>Введите id искомого пользователя</label><br>
+    <input type="text" name="id" id="userID"/><br><br>
+    <button onclick="findUser()">Найти</button><br><br>
+</form>
+<button onclick="goMain()">На главную страницу</button>
+</body>
+<script>
+    async function findUser() {
+        const id = document.getElementsByTagName("input")[0].value;
+        const response = await fetch(`/api/users/${id}`,{
+            method: "GET",
+            headers: {"Accept": "application/json"}
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            let data = JSON.stringify(user)
+            alert(`Пользователь найден:\n${data}`);
+        }else {
+            let text = await response.text();
+            alert(`Ошибка запроса ${response.status}: ${text}`);
+        }
+    }
+    document.forms["userForm"].addEventListener("onclick", e => {
+        e.preventDefault();
+        const form = document.forms["userForm"];
+        const id = form.elements["id"].value;
+        deleteUser(id);
+    })
+    function goMain() {
+        location.assign("/");
+    }
+</script>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Удаление пользователя</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1>Удаление</h1>
+<form name="userForm">
+    <label>Введите id пользователя для удаления</label><br>
+    <input required type="text" name="id" id="userID"/><br><br>
+    <button onclick="deleteUser()">Удалить пользователя</button><br><br>
+</form>
+<button onclick="goMain()">На главную страницу</button>
+</body>
+<script>
+    async function deleteUser() {
+        const id = document.getElementsByTagName("input")[0].value;
+        const response = await fetch(`/api/deleteUser/${id}`,{
+            method: "DELETE",
+            headers: {"Accept": "application/json"}
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            let dataString = JSON.stringify(user)
+            alert(`Пользователь успешно удален:\n${dataString}`);
+        } else {
+            let text = await response.text();
+            alert(`Ошибка запроса ${response.status}: ${text}`);
+        }
+    }
+    document.forms["userForm"].addEventListener("onclick", e => {
+        e.preventDefault();
+        const form = document.forms["userForm"];
+        const id = form.elements["id"].value;
+        deleteUser(id);
+    })
+    function goMain() {
+        location.assign("/");
+    }
+</script>
+</html>

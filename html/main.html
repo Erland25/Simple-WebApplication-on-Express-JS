@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная страница</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1>Система управления данными пользователей</h1>
+<button onclick="goCreateUser()">Создать пользователя</button><br><br>
+<button onclick="goGetUserByID()">Найти пользователя по id</button><br><br>
+<button onclick="goUpdateUser()">Обновить данные пользователя</button><br><br>
+<button onclick="goDeleteUser()">Удалить пользователя по id</button><br><br>
+</body>
+<script>
+    function goCreateUser() {location.assign("/api/register");}
+    function goGetUserByID() {location.assign("/api/users");}
+    function goUpdateUser() {location.assign("/api/updateUser");}
+    function goDeleteUser() {location.assign("/api/deleteUser");}
+</script>
+<html>

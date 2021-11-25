@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+<h1>Введите данные</h1>
+<form name="userForm">
+    <label>Имя</label><br>
+    <input type="text" name="userName" maxlength="30"/><br><br>
+    <label>Возраст</label><br>
+    <input type="number" name="userAge" min="14" max="105"/><br><br>
+    <button onclick="createUser()">Создать</button><br><br>
+</form>
+<button onclick="goMain()">На главную страницу</button>
+</body>
+<script>
+    async function createUser() {
+        const form = document.forms["userForm"];
+        const userName = form.elements["userName"].value;
+        const userAge = form.elements["userAge"].value;
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            body: JSON.stringify({
+                name: userName,
+                age: parseInt(userAge,10)
+            })
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            let data = JSON.stringify(user)
+            alert(`Пользователь успешно зарегистрирован!\n${data}`);
+        } else {
+            let text = await response.text();
+            alert(`Ошибка запроса ${response.status}: ${text}`);
+        }
+    }
+    document.forms["userForm"].addEventListener("onclick", e => {
+        e.preventDefault();
+        createUser();
+    })
+    function goMain() {
+        location.assign("/");
+    }
+</script>
+</html>
